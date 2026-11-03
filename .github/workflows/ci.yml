@@ -32,9 +32,8 @@ jobs:
       - name: go vet
         run: go vet ./...
       - name: staticcheck
-        uses: dominikh/staticcheck-action@v1
-        with:
-          install-go: false
+        # staticcheck-action は内部で Node.js 20 向けの actions/cache を使うため、直接実行する
+        run: go run honnef.co/go/tools/cmd/staticcheck@v0.8.2 ./...
 
   test:
     name: テスト
