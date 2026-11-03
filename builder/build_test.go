@@ -173,9 +173,9 @@ func TestBuildOGP(t *testing.T) {
 		}
 		stage := readFile(t, out, "chapters/1/1-2/index.html")
 		for _, want := range []string{
-			`<meta property="og:title" content="1-2 二問目 | A=B Answer Book">`,
+			`<meta property="og:title" content="1-2 二問目 | A=B Unofficial Answer Book">`,
 			`<meta property="og:url" content="https://example.com/book/chapters/1/1-2/">`,
-			`<meta property="og:image" content="https://example.com/book/static/ogp.png">`,
+			`<meta property="og:image" content="https://example.com/book/static/ogp-unofficial.png">`,
 			`<meta name="twitter:card" content="summary_large_image">`,
 		} {
 			if !strings.Contains(stage, want) {
@@ -184,14 +184,14 @@ func TestBuildOGP(t *testing.T) {
 		}
 		top := readFile(t, out, "index.html")
 		for _, want := range []string{
-			`<meta property="og:title" content="A=B Answer Book">`,
+			`<meta property="og:title" content="A=B Unofficial Answer Book">`,
 			`<meta property="og:url" content="https://example.com/book/">`,
 		} {
 			if !strings.Contains(top, want) {
 				t.Errorf("トップページに %q がない", want)
 			}
 		}
-		if _, err := os.Stat(filepath.Join(out, "static", "ogp.png")); err != nil {
+		if _, err := os.Stat(filepath.Join(out, "static", "ogp-unofficial.png")); err != nil {
 			t.Error("OGP 画像が出力されていない")
 		}
 	})

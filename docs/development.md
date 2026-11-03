@@ -40,7 +40,7 @@ go run ./builder -serve      # 出力後に http://localhost:8080/ で確認
 
 SNS などに URL を貼ったときのカード表示用に、各ページへ OGP タグを出力します。
 
-- 画像は [builder/static/ogp.png](../builder/static/ogp.png)（1200×630）で、全ページ共通です。
+- 画像は [builder/static/ogp-unofficial.png](../builder/static/ogp-unofficial.png)（1200×630）で、全ページ共通です。
 - 画像の元は [docs/ogp.html](ogp.html) です。作り直すときは、このファイルをブラウザで 1200×630 の大きさで開いてスクリーンショットを撮ります。
 - OGP には絶対 URL が必要なので、`-base-url` を指定したときだけタグを出力します。公開時は GitHub Actions が公開先の URL を自動で渡します。
 
