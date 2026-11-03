@@ -28,7 +28,10 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
       - name: サイト生成
-        run: go run ./builder -base-url "${{ steps.pages.outputs.base_url }}"
+        run: >-
+          go run ./builder
+          -base-url "${{ steps.pages.outputs.base_url }}"
+          -repo-url "${{ github.server_url }}/${{ github.repository }}"
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist

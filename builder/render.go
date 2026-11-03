@@ -31,6 +31,7 @@ type Crumb struct {
 
 // Page はテンプレートに渡すデータ。Root はそのページからサイトのルートへの相対パス。
 // URL と OGImage は公開先の絶対 URL で、-base-url を指定したときだけ設定される（OGP 用）。
+// RepoURL はソースコードのリポジトリの URL で、-repo-url を指定したときだけ設定される。
 type Page struct {
 	Root    string
 	Title   string
@@ -39,6 +40,7 @@ type Page struct {
 	Site    *Site
 	URL     string
 	OGImage string
+	RepoURL string
 
 	Chapter   *Chapter
 	Stage     *Stage
@@ -80,8 +82,14 @@ func loadTemplates() (map[string]*template.Template, error) {
 	return tmpls, nil
 }
 
-// build はサイトを out に出力する。baseURL は公開先の URL で、空なら OGP タグを出さない。
-func build(site *Site, out, baseURL string) error {
+// buildOptions は公開先によって変わる設定。どちらも空ならローカル確認用の出力になる。
+type buildOptions struct {
+	BaseURL string // 公開先の URL。空なら OGP タグを出さない
+	RepoURL string // リポジトリの URL。空ならフッターに GitHub へのリンクを出さない
+}
+
+// build はサイトを out に出力する。
+func build(site *Site, out string, opts buildOptions) error {
 	tmpls, err := loadTemplates()
 	if err != nil {
 		return err
@@ -89,6 +97,7 @@ func build(site *Site, out, baseURL string) error {
 	if err := os.RemoveAll(out); err != nil {
 		return err
 	}
+	baseURL := opts.BaseURL
 	if baseURL != "" {
 		baseURL = strings.TrimSuffix(baseURL, "/") + "/"
 	}
@@ -99,6 +108,7 @@ func build(site *Site, out, baseURL string) error {
 			p.Root = "./"
 		}
 		p.Site = site
+		p.RepoURL = opts.RepoURL
 		if baseURL != "" {
 			p.URL = baseURL + path
 			p.OGImage = baseURL + "static/ogp-unofficial.png"
