@@ -35,6 +35,7 @@ go run ./builder -serve      # 出力後に http://localhost:8080/ で確認
 | `-out` | 出力先（既定: `dist`） |
 | `-serve` / `-addr` | 出力後にローカルサーバーを起動する / そのアドレス（既定: `localhost:8080`） |
 | `-base-url` | 公開先の URL。指定すると OGP タグを出力する |
+| `-repo-url` | リポジトリの URL。指定するとフッターに GitHub へのリンクを出す（公開時は GitHub Actions が自動で渡す） |
 
 ### OGP
 
@@ -70,6 +71,7 @@ go test -run '^TestBuild' ./...    # 結合テストのみ
 | `TestBuildFixture` | テスト用コンテンツからサイトを生成し、全ページが出力されるか、ステージ・テクニックのページに解答コード・関連リンク・前後リンク・記録が出ているか |
 | `TestBuildRemovesStaleFiles` | 再生成時に前回の出力が残らないか |
 | `TestBuildOGP` | `-base-url` を指定したときに、ページごとのタイトルと絶対 URL で OGP タグが出るか。指定しないときは出ないか |
+| `TestBuildFooterLinks` | フッターに元のゲームへのリンクが常に出るか。`-repo-url` を指定したときだけ GitHub へのリンクが出るか |
 | `TestBuildContent` | **実際の `content/` からサイトを生成できるか**。記事の書き間違いはここで検出される |
 
 結合テストでは、生成した全ページについて次も検査します。

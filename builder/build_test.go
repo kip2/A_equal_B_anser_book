@@ -14,7 +14,7 @@ import (
 
 func TestBuildFixture(t *testing.T) {
 	out := t.TempDir()
-	if err := build(loadFixture(t), out, ""); err != nil {
+	if err := build(loadFixture(t), out, buildOptions{}); err != nil {
 		t.Fatal(err)
 	}
 
@@ -69,7 +69,7 @@ func TestBuildRemovesStaleFiles(t *testing.T) {
 	if err := os.WriteFile(stale, nil, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := build(loadFixture(t), out, ""); err != nil {
+	if err := build(loadFixture(t), out, buildOptions{}); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := os.Stat(stale); err == nil {
@@ -84,7 +84,7 @@ func TestBuildContent(t *testing.T) {
 		t.Fatal(err)
 	}
 	out := t.TempDir()
-	if err := build(site, out, ""); err != nil {
+	if err := build(site, out, buildOptions{}); err != nil {
 		t.Fatal(err)
 	}
 	checkSite(t, out)
@@ -168,7 +168,7 @@ func readFile(t *testing.T, out, name string) string {
 func TestBuildOGP(t *testing.T) {
 	t.Run("base-url あり", func(t *testing.T) {
 		out := t.TempDir()
-		if err := build(loadFixture(t), out, "https://example.com/book"); err != nil {
+		if err := build(loadFixture(t), out, buildOptions{BaseURL: "https://example.com/book"}); err != nil {
 			t.Fatal(err)
 		}
 		stage := readFile(t, out, "chapters/1/1-2/index.html")
@@ -198,11 +198,44 @@ func TestBuildOGP(t *testing.T) {
 
 	t.Run("base-url なし", func(t *testing.T) {
 		out := t.TempDir()
-		if err := build(loadFixture(t), out, ""); err != nil {
+		if err := build(loadFixture(t), out, buildOptions{}); err != nil {
 			t.Fatal(err)
 		}
 		if strings.Contains(readFile(t, out, "index.html"), "og:") {
 			t.Error("base-url なしなのに OGP タグが出ている")
+		}
+	})
+}
+
+func TestBuildFooterLinks(t *testing.T) {
+	const game = `href="https://store.steampowered.com/app/1720850/AB/"`
+
+	t.Run("repo-url あり", func(t *testing.T) {
+		out := t.TempDir()
+		if err := build(loadFixture(t), out, buildOptions{RepoURL: "https://github.com/example/book"}); err != nil {
+			t.Fatal(err)
+		}
+		for _, page := range []string{"index.html", "chapters/1/1-2/index.html"} {
+			html := readFile(t, out, page)
+			for _, want := range []string{game, `href="https://github.com/example/book"`} {
+				if !strings.Contains(html, want) {
+					t.Errorf("%s に %q がない", page, want)
+				}
+			}
+		}
+	})
+
+	t.Run("repo-url なし", func(t *testing.T) {
+		out := t.TempDir()
+		if err := build(loadFixture(t), out, buildOptions{}); err != nil {
+			t.Fatal(err)
+		}
+		html := readFile(t, out, "index.html")
+		if !strings.Contains(html, game) {
+			t.Errorf("元のゲームへのリンク %q がない", game)
+		}
+		if strings.Contains(html, "ソースコード") {
+			t.Error("repo-url なしなのに GitHub へのリンクが出ている")
 		}
 	})
 }
