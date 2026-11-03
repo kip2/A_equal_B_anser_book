@@ -1,0 +1,15 @@
+{{define "content"}}
+<h1>チャプター</h1>
+{{template "toggleAll"}}
+{{range .Site.Chapters}}
+<details open>
+  <summary>{{.DisplayTitle}} <span class="rec">{{.DoneCount}} / {{len .Stages}}</span></summary>
+  <div class="body">
+    <p><a href="{{$.Root}}{{.URL}}">→ {{.Name}}のページ</a></p>
+    {{template "stageList" (dict "Root" $.Root "Stages" .Stages "Empty" "ステージはまだありません")}}
+  </div>
+</details>
+{{else}}
+<p class="empty">まだありません。</p>
+{{end}}
+{{end}}

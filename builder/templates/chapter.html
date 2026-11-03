@@ -1,0 +1,39 @@
+{{define "content"}}
+{{with .Chapter}}
+<h1>{{.DisplayTitle}}</h1>
+{{if .Body}}<div class="md">{{.Body}}</div>{{end}}
+
+<details open>
+  <summary>ステージ <span class="rec">{{.DoneCount}} / {{len .Stages}}</span></summary>
+  <div class="body">
+    {{template "stageList" (dict "Root" $.Root "Stages" .Stages "Empty" "ステージはまだありません")}}
+  </div>
+</details>
+
+<details>
+  <summary>テクニック</summary>
+  <div class="body">
+    <p class="note">このチャプターから使えるもの</p>
+    {{template "techList" (dict "Root" $.Root "Techniques" .Techniques "Empty" "なし")}}
+    <p class="note">このチャプターのステージで使ったもの</p>
+    {{template "techList" (dict "Root" $.Root "Techniques" .UsedTechniques "Empty" "なし")}}
+    <p><a href="{{$.Root}}techniques/">→ テクニック総覧</a></p>
+  </div>
+</details>
+
+<details>
+  <summary>文法</summary>
+  <div class="body">
+    {{with .Syntax}}
+      <div class="md">{{.Body}}</div>
+      <p><a href="{{$.Root}}{{.URL}}">→ 文法ページを開く</a></p>
+    {{else}}
+      <p class="empty">このチャプターの文法メモはまだありません。</p>
+    {{end}}
+    <p><a href="{{$.Root}}syntax/">→ 文法総覧</a></p>
+  </div>
+</details>
+
+{{template "pager" (dict "Root" $.Root "Prev" .Prev "Next" .Next)}}
+{{end}}
+{{end}}

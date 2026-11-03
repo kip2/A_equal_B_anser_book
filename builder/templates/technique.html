@@ -1,0 +1,31 @@
+{{define "content"}}
+{{with .Technique}}
+<h1>{{.Title}}</h1>
+{{template "techMeta" (dict "Root" $.Root "T" .)}}
+
+<div class="md">{{.Body}}</div>
+
+<hr>
+
+<details>
+  <summary>使ったステージ <span class="rec">{{len .UsedIn}} 件</span></summary>
+  <div class="body">
+    {{template "stageList" (dict "Root" $.Root "Stages" .UsedIn "Empty" "まだありません")}}
+  </div>
+</details>
+
+<details>
+  <summary>関連する文法</summary>
+  <div class="body">
+    {{range .Syntaxes}}
+      {{template "syntaxDetails" (dict "Root" $.Root "Syntax" . "Open" false)}}
+    {{else}}
+      <p class="empty">なし</p>
+    {{end}}
+  </div>
+</details>
+
+<hr>
+<p><a href="{{$.Root}}techniques/#t-{{.Slug}}">&lt;&lt; テクニック総覧</a></p>
+{{end}}
+{{end}}

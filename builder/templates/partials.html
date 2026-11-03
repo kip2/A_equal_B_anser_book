@@ -1,0 +1,65 @@
+{{/* ステージへのリンク一覧。dict "Root" "Stages" "Empty" */}}
+{{define "stageList"}}
+{{if .Stages}}
+<ul class="tree">
+  {{range .Stages}}
+  <li><a href="{{$.Root}}{{.URL}}">{{.ID}} {{.Title}}</a><span class="rec">{{.LinesText}}行 / {{.StepsText}}ステップ / {{.StatusLabel}}</span></li>
+  {{end}}
+</ul>
+{{else}}
+<p class="empty">{{.Empty}}</p>
+{{end}}
+{{end}}
+
+{{/* テクニックへのリンク一覧。dict "Root" "Techniques" "Empty" */}}
+{{define "techList"}}
+{{if .Techniques}}
+<ul class="tree">
+  {{range .Techniques}}
+  <li><a href="{{$.Root}}{{.URL}}">{{.Title}}</a><span class="rec">チャプター{{.Since.Num}}〜</span></li>
+  {{end}}
+</ul>
+{{else}}
+<p class="empty">{{.Empty}}</p>
+{{end}}
+{{end}}
+
+{{/* 文法の本文を開閉で表示する。dict "Root" "Syntax" "Open" */}}
+{{define "syntaxDetails"}}
+<details{{if .Open}} open{{end}}>
+  <summary>{{.Syntax.DisplayTitle}}</summary>
+  <div class="body">
+    <div class="md">{{.Syntax.Body}}</div>
+    <p><a href="{{.Root}}{{.Syntax.URL}}">→ 文法ページを開く</a></p>
+  </div>
+</details>
+{{end}}
+
+{{/* テクニックの補足情報。dict "Root" "T" */}}
+{{define "techMeta"}}
+<dl class="meta">
+  <dt>使えるのは</dt>
+  <dd><a href="{{.Root}}{{.T.Since.URL}}">{{.T.Since.Name}}</a>から</dd>
+  <dt>関連する文法</dt>
+  <dd>{{range $i, $s := .T.Syntaxes}}{{if $i}}、{{end}}<a href="{{$.Root}}{{$s.URL}}">{{$s.Name}}</a>{{else}}-{{end}}</dd>
+  <dt>使ったステージ</dt>
+  <dd>{{range $i, $s := .T.UsedIn}}{{if $i}}、{{end}}<a href="{{$.Root}}{{$s.URL}}">{{$s.ID}}</a>{{else}}-{{end}}</dd>
+</dl>
+{{end}}
+
+{{/* 前後のページへのリンク。dict "Root" "Prev" "Next" */}}
+{{define "pager"}}
+<hr>
+<nav class="pager">
+  {{if .Prev}}<a class="prev" href="{{.Root}}{{.Prev.URL}}">&lt;&lt; {{.Prev.Label}}</a>{{else}}<span></span>{{end}}
+  {{if .Next}}<a class="next" href="{{.Root}}{{.Next.URL}}">{{.Next.Label}} &gt;&gt;</a>{{else}}<span></span>{{end}}
+</nav>
+{{end}}
+
+{{/* ページ内の開閉ブロックをまとめて開く/閉じる */}}
+{{define "toggleAll"}}
+<p class="toggle-all">
+  <button type="button" data-toggle-all="open">[すべて開く]</button>
+  <button type="button" data-toggle-all="close">[すべて閉じる]</button>
+</p>
+{{end}}

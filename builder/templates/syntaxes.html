@@ -1,0 +1,23 @@
+{{define "content"}}
+<h1>文法総覧</h1>
+<p class="note">チャプターごとに追加される文法です。見出しをクリックすると開きます。</p>
+{{template "toggleAll"}}
+
+{{range .Site.Syntaxes}}
+<details id="s-{{.Chapter.Num}}">
+  <summary>{{.DisplayTitle}}</summary>
+  <div class="body">
+    <div class="md">{{.Body}}</div>
+    <dl class="meta">
+      <dt>チャプター</dt>
+      <dd><a href="{{$.Root}}{{.Chapter.URL}}">{{.Chapter.DisplayTitle}}</a></dd>
+      <dt>関連テクニック</dt>
+      <dd>{{range $i, $t := .Techniques}}{{if $i}}、{{end}}<a href="{{$.Root}}{{$t.URL}}">{{$t.Title}}</a>{{else}}-{{end}}</dd>
+    </dl>
+    <p><a href="{{$.Root}}{{.URL}}">→ 個別ページを開く</a></p>
+  </div>
+</details>
+{{else}}
+<p class="empty">まだありません。</p>
+{{end}}
+{{end}}

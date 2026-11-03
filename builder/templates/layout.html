@@ -1,0 +1,36 @@
+{{define "layout" -}}
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{with .Title}}{{.}} | {{end}}A=B Answer Book</title>
+<link rel="stylesheet" href="{{.Root}}static/style.css">
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a class="site-title" href="{{.Root}}">A=B Answer Book</a>
+  <nav class="site-nav">
+    <a href="{{.Root}}chapters/"{{if eq .Section "chapters"}} class="active"{{end}}>チャプター</a> |
+    <a href="{{.Root}}techniques/"{{if eq .Section "techniques"}} class="active"{{end}}>テクニック</a> |
+    <a href="{{.Root}}syntax/"{{if eq .Section "syntax"}} class="active"{{end}}>文法</a>
+  </nav>
+</header>
+<hr>
+{{with .Crumbs}}
+<nav class="crumbs">
+  <a href="{{$.Root}}">トップ</a>
+  {{- range .}} / {{if .URL}}<a href="{{$.Root}}{{.URL}}">{{.Label}}</a>{{else}}{{.Label}}{{end}}{{end}}
+</nav>
+{{end}}
+<main>
+{{template "content" .}}
+</main>
+<hr>
+<footer class="site-footer">ネタバレ注意：解答と解説を含みます。</footer>
+</div>
+<script src="{{.Root}}static/site.js"></script>
+</body>
+</html>
+{{end}}
