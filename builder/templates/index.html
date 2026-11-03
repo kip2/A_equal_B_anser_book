@@ -1,0 +1,39 @@
+{{define "content"}}
+<p>ゲーム「A=B」の自分の解答集とテクニック集です。<br>
+ネタバレ注意：全ステージの解答と解説を含みます。</p>
+
+<h2>目次</h2>
+{{template "toggleAll"}}
+<details open>
+  <summary>チャプター <span class="rec">{{.Site.DoneCount}} / {{.Site.StageCount}} ステージ クリア</span></summary>
+  <div class="body">
+    {{range .Site.Chapters}}
+    <details>
+      <summary>{{.DisplayTitle}} <span class="rec">{{.DoneCount}} / {{len .Stages}}</span></summary>
+      <div class="body">
+        <p><a href="{{$.Root}}{{.URL}}">→ {{.Name}}のページ</a></p>
+        {{template "stageList" (dict "Root" $.Root "Stages" .Stages "Empty" "ステージはまだありません")}}
+      </div>
+    </details>
+    {{else}}
+    <p class="empty">まだありません。</p>
+    {{end}}
+  </div>
+</details>
+<details>
+  <summary>テクニック <span class="rec">{{len .Site.Techniques}} 件</span></summary>
+  <div class="body">
+    <p><a href="{{.Root}}techniques/">→ テクニック総覧</a></p>
+    {{template "techList" (dict "Root" .Root "Techniques" .Site.Techniques "Empty" "まだありません")}}
+  </div>
+</details>
+<details>
+  <summary>文法 <span class="rec">{{len .Site.Syntaxes}} チャプター分</span></summary>
+  <div class="body">
+    <p><a href="{{.Root}}syntax/">→ 文法総覧</a></p>
+    <ul class="tree">
+      {{range .Site.Syntaxes}}<li><a href="{{$.Root}}{{.URL}}">{{.DisplayTitle}}</a></li>{{end}}
+    </ul>
+  </div>
+</details>
+{{end}}

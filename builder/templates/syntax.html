@@ -1,0 +1,26 @@
+{{define "content"}}
+{{with .Syntax}}
+<h1>{{.DisplayTitle}}</h1>
+
+<div class="md">{{.Body}}</div>
+
+<hr>
+
+<details>
+  <summary>チャプター: {{.Chapter.DisplayTitle}}</summary>
+  <div class="body">
+    <p><a href="{{$.Root}}{{.Chapter.URL}}">→ {{.Chapter.Name}}のページ</a></p>
+    {{template "stageList" (dict "Root" $.Root "Stages" .Chapter.Stages "Empty" "ステージはまだありません")}}
+  </div>
+</details>
+
+<details>
+  <summary>関連テクニック <span class="rec">{{len .Techniques}} 件</span></summary>
+  <div class="body">
+    {{template "techList" (dict "Root" $.Root "Techniques" .Techniques "Empty" "なし")}}
+  </div>
+</details>
+
+{{template "pager" (dict "Root" $.Root "Prev" .Prev "Next" .Next)}}
+{{end}}
+{{end}}

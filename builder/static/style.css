@@ -1,0 +1,133 @@
+/* 黒地に白い文字と線だけのシンプルなテーマ */
+:root {
+  --bg: #0a0a0a;
+  --text: #e8e8e8;
+  --muted: #8a8a8a;
+  --line: #e8e8e8;
+  --faint: #333;
+  --mono: "Cascadia Mono", "Consolas", "Menlo", "BIZ UDGothic", "Noto Sans Mono CJK JP", monospace;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.wrap { max-width: 780px; margin: 0 auto; padding: 1.5rem 1.2rem 3rem; }
+
+a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--muted); }
+a:hover { text-decoration-color: var(--text); }
+
+h1, h2, h3 { font-weight: bold; line-height: 1.5; margin: 1.6em 0 .6em; }
+h1 { font-size: 1.4rem; margin-top: 0; }
+h2 { font-size: 1.1rem; }
+h3 { font-size: 1rem; }
+
+hr { border: none; border-top: 1px solid var(--line); margin: 1.2rem 0; }
+
+/* ヘッダー・フッター */
+.site-title { font-size: 1.2rem; font-weight: bold; text-decoration: none; }
+.site-nav { margin-top: .3rem; }
+.site-nav a.active { text-decoration: none; font-weight: bold; }
+.site-nav a.active::before { content: "> "; }
+.crumbs { font-size: .85rem; color: var(--muted); }
+.crumbs a { color: var(--muted); }
+.site-footer { font-size: .8rem; color: var(--muted); }
+
+.muted, .empty { color: var(--muted); }
+.note { color: var(--muted); font-size: .9rem; }
+
+/* ツリー状のリスト */
+ul.tree { list-style: none; margin: .3rem 0; padding-left: 0; }
+ul.tree ul.tree { padding-left: 1.5rem; }
+ul.tree li { margin: .1rem 0; }
+ul.tree li::before { content: "- "; color: var(--muted); }
+.rec { color: var(--muted); font-size: .85rem; margin-left: .6rem; }
+
+/* 開閉する見出し */
+details { margin: .3rem 0; }
+details > summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: bold;
+}
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "[+] "; color: var(--muted); font-weight: normal; }
+details[open] > summary::before { content: "[-] "; }
+details > summary:hover { text-decoration: underline; text-underline-offset: 3px; }
+details > .body { padding: .2rem 0 .6rem 1.5rem; border-left: 1px solid var(--faint); margin-left: .45rem; }
+details details > summary { font-weight: normal; }
+
+/* 記録などの項目 */
+dl.meta { display: grid; grid-template-columns: auto 1fr; gap: 0 1.5rem; margin: .4rem 0; }
+dl.meta dt { color: var(--muted); }
+dl.meta dd { margin: 0; }
+
+/* Markdown 本文 */
+.md > :first-child { margin-top: 0; }
+.md h2 { border-bottom: 1px solid var(--line); padding-bottom: .1em; }
+.md code { border: 1px solid var(--faint); padding: 0 .3em; }
+.md table { border-collapse: collapse; margin: .6rem 0; }
+.md th, .md td { border: 1px solid var(--line); padding: .2rem .8rem; text-align: left; }
+.md blockquote { margin: 1em 0; padding-left: 1em; border-left: 1px solid var(--line); color: var(--muted); }
+.md ul { padding-left: 1.4rem; }
+
+/* コードブロック（行番号 + コピーボタン） */
+.code-block { position: relative; margin: .8rem 0; }
+.md pre {
+  margin: 0;
+  padding: .6rem .8rem;
+  border: 1px solid var(--line);
+  overflow-x: auto;
+  line-height: 1.6;
+}
+.md pre code { border: none; padding: 0; counter-reset: line; }
+.md pre code .line { display: block; min-height: 1.6em; }
+.md pre code .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2em;
+  margin-right: 1em;
+  text-align: right;
+  color: var(--muted);
+  user-select: none;
+}
+.copy-btn {
+  position: absolute;
+  top: .35rem;
+  right: .5rem;
+  padding: 0;
+  font: inherit;
+  font-size: .8rem;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.copy-btn:hover { color: var(--text); text-decoration: underline; }
+
+/* 前後リンク */
+.pager { display: flex; justify-content: space-between; gap: 1rem; font-size: .9rem; }
+.pager .next { margin-left: auto; text-align: right; }
+
+/* すべて開く / すべて閉じる */
+.toggle-all { margin: .4rem 0 .8rem; }
+.toggle-all button {
+  padding: 0;
+  margin-right: .8rem;
+  font: inherit;
+  font-size: .9rem;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.toggle-all button:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }

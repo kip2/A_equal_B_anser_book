@@ -1,0 +1,166 @@
+package main
+
+import (
+	"io/fs"
+	"os"
+	"path"
+	"path/filepath"
+	"regexp"
+	"strings"
+	"testing"
+)
+
+// 結合テスト: コンテンツを読み込んでサイトを生成し、出力を検査する。
+
+func TestBuildFixture(t *testing.T) {
+	out := t.TempDir()
+	if err := build(loadFixture(t), out); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, name := range []string{
+		"index.html",
+		"chapters/index.html",
+		"chapters/1/index.html",
+		"chapters/1/1-1/index.html",
+		"chapters/1/1-2/index.html",
+		"chapters/2/2-1/index.html",
+		"techniques/index.html",
+		"techniques/swap/index.html",
+		"techniques/mark/index.html",
+		"syntax/index.html",
+		"syntax/1/index.html",
+		"syntax/2/index.html",
+		"static/style.css",
+		"static/site.js",
+	} {
+		if _, err := os.Stat(filepath.Join(out, filepath.FromSlash(name))); err != nil {
+			t.Errorf("%s が出力されていない", name)
+		}
+	}
+
+	checkSite(t, out)
+
+	stage := readFile(t, out, "chapters/1/1-2/index.html")
+	for _, want := range []string{
+		`<code class="language-ab">`,       // 解答のコードブロック
+		`href="../../../techniques/swap/"`, // 使ったテクニック
+		`href="../../../syntax/1/"`,        // 文法
+		`href="../../../chapters/1/1-1/"`,  // 前のステージ
+		`href="../../../chapters/2/2-1/"`,  // 次のステージ（チャプターをまたぐ）
+		`2行 / 10ステップ / 挑戦中`,
+	} {
+		if !strings.Contains(stage, want) {
+			t.Errorf("1-2 のページに %q がない", want)
+		}
+	}
+
+	technique := readFile(t, out, "techniques/mark/index.html")
+	for _, want := range []string{`href="../../syntax/1/"`, `href="../../syntax/2/"`, `href="../../chapters/2/2-1/"`} {
+		if !strings.Contains(technique, want) {
+			t.Errorf("mark のページに %q がない", want)
+		}
+	}
+}
+
+func TestBuildRemovesStaleFiles(t *testing.T) {
+	out := t.TempDir()
+	stale := filepath.Join(out, "old.html")
+	if err := os.WriteFile(stale, nil, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := build(loadFixture(t), out); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(stale); err == nil {
+		t.Error("前回の出力が残っている")
+	}
+}
+
+// TestBuildContent は実際の content/ がエラーなく生成でき、リンク切れがないことを確かめる。
+func TestBuildContent(t *testing.T) {
+	site, err := loadSite(filepath.Join("..", "content"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	out := t.TempDir()
+	if err := build(site, out); err != nil {
+		t.Fatal(err)
+	}
+	checkSite(t, out)
+}
+
+var (
+	linkRe = regexp.MustCompile(`(?:href|src)="([^"]*)"`)
+	idRe   = regexp.MustCompile(`id="([^"]+)"`)
+)
+
+// checkSite は生成された全ページについて、テンプレートの不具合とリンク切れを検査する。
+func checkSite(t *testing.T, out string) {
+	t.Helper()
+	pages := map[string]string{}
+	err := filepath.WalkDir(out, func(p string, d fs.DirEntry, err error) error {
+		if err != nil || d.IsDir() || filepath.Ext(p) != ".html" {
+			return err
+		}
+		rel, _ := filepath.Rel(out, p)
+		pages[filepath.ToSlash(rel)] = readFile(t, out, filepath.ToSlash(rel))
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for page, html := range pages {
+		// html/template が危険と判断した値や、存在しないフィールドの参照
+		for _, bad := range []string{"ZgotmplZ", "<no value>"} {
+			if strings.Contains(html, bad) {
+				t.Errorf("%s: %q が含まれている", page, bad)
+			}
+		}
+
+		for _, m := range linkRe.FindAllStringSubmatch(html, -1) {
+			link := m[1]
+			if strings.Contains(link, "://") || strings.HasPrefix(link, "mailto:") {
+				continue
+			}
+			target, frag, _ := strings.Cut(link, "#")
+			resolved := page
+			if target != "" {
+				resolved = path.Join(path.Dir(page), target)
+				if strings.HasSuffix(target, "/") {
+					resolved = path.Join(resolved, "index.html")
+				}
+			}
+			if strings.HasPrefix(resolved, "..") {
+				t.Errorf("%s: %q がサイトの外を指している", page, link)
+				continue
+			}
+			if _, err := os.Stat(filepath.Join(out, filepath.FromSlash(resolved))); err != nil {
+				t.Errorf("%s: リンク切れ %q", page, link)
+				continue
+			}
+			if frag != "" && !hasID(pages[resolved], frag) {
+				t.Errorf("%s: %q のアンカーがない", page, link)
+			}
+		}
+	}
+}
+
+func hasID(html, id string) bool {
+	for _, m := range idRe.FindAllStringSubmatch(html, -1) {
+		if m[1] == id {
+			return true
+		}
+	}
+	return false
+}
+
+func readFile(t *testing.T, out, name string) string {
+	t.Helper()
+	b, err := os.ReadFile(filepath.Join(out, filepath.FromSlash(name)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	return string(b)
+}

@@ -1,0 +1,36 @@
+{{define "content"}}
+{{with .Stage}}
+<h1>{{.ID}} {{.Title}}</h1>
+<p class="muted">{{.LinesText}}行 / {{.StepsText}}ステップ / {{.StatusLabel}}</p>
+
+<div class="md">{{.Body}}</div>
+
+<hr>
+
+<details>
+  <summary>使ったテクニック <span class="rec">{{len .Techniques}} 件</span></summary>
+  <div class="body">
+    {{template "techList" (dict "Root" $.Root "Techniques" .Techniques "Empty" "なし")}}
+  </div>
+</details>
+
+<details>
+  <summary>文法</summary>
+  <div class="body">
+    {{with .Chapter.Syntax}}
+      {{template "syntaxDetails" (dict "Root" $.Root "Syntax" . "Open" false)}}
+    {{else}}
+      <p class="empty">{{.Chapter.Name}}の文法メモはまだありません。</p>
+    {{end}}
+    {{with .EarlierSyntaxes $.Site}}
+      <p class="note">それ以前の文法</p>
+      <ul class="tree">
+        {{range .}}<li><a href="{{$.Root}}{{.URL}}">{{.DisplayTitle}}</a></li>{{end}}
+      </ul>
+    {{end}}
+  </div>
+</details>
+
+{{template "pager" (dict "Root" $.Root "Prev" .Prev "Next" .Next)}}
+{{end}}
+{{end}}

@@ -1,0 +1,20 @@
+{{define "content"}}
+<h1>テクニック総覧</h1>
+<p class="note">使えるようになるチャプターごとに並べています。見出しをクリックすると開きます。</p>
+{{template "toggleAll"}}
+
+{{range .Site.Chapters}}{{if .Techniques}}
+<h2><a href="{{$.Root}}{{.URL}}">{{.Name}}</a>から</h2>
+{{range .Techniques}}
+<details id="t-{{.Slug}}">
+  <summary>{{.Title}}</summary>
+  <div class="body">
+    {{template "techMeta" (dict "Root" $.Root "T" .)}}
+    <div class="md">{{.Body}}</div>
+    <p><a href="{{$.Root}}{{.URL}}">→ 個別ページを開く</a></p>
+  </div>
+</details>
+{{end}}
+{{end}}{{end}}
+{{if not .Site.Techniques}}<p class="empty">まだありません。</p>{{end}}
+{{end}}
