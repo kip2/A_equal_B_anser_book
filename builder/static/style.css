@@ -102,17 +102,16 @@ dl.meta dd { margin: 0; }
 }
 .copy-btn {
   position: absolute;
-  top: .35rem;
-  right: .5rem;
-  padding: 0;
-  font: inherit;
-  font-size: .8rem;
+  top: .4rem;
+  right: .4rem;
+  display: flex;
+  padding: .25rem;
   color: var(--muted);
-  background: none;
+  background: var(--bg);
   border: none;
   cursor: pointer;
 }
-.copy-btn:hover { color: var(--text); text-decoration: underline; }
+.copy-btn:hover, .copy-btn.done { color: var(--text); }
 
 /* 前後リンク */
 .pager { display: flex; justify-content: space-between; gap: 1rem; font-size: .9rem; }
