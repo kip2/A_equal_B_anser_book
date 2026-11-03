@@ -24,10 +24,10 @@ docs/                        # 記事の追加手順と雛形
 
 ## 記事の追加
 
-手順と書式は [docs/writing.md](docs/writing.md) を参照してください。雛形は [docs/templates/](docs/templates/) にあります。
-Claude Code では `/add-article` で追加を頼めます。
-
-ページ同士のリンク（ステージ ⇔ テクニック ⇔ 文法）や進捗表は、frontmatterから自動で生成されます。
+- 手順と書式：[docs/writing.md](docs/writing.md)
+- 雛形：[docs/templates/](docs/templates/)
+- Claude Code では `/add-article` で追加を頼めます。
+- ページ同士のリンク（ステージ ⇔ テクニック ⇔ 文法）や進捗表は、frontmatter から自動で生成されます。
 
 ## ローカルで確認
 
@@ -49,5 +49,6 @@ go test -run '^TestBuild' ./...    # 結合テスト（サイト生成とリン�
 
 ## 公開
 
-`main` に push すると GitHub Actions がビルドして GitHub Pages に公開します。
+`main` に push すると、GitHub Actions がテスト・ビルドして GitHub Pages に公開します。
+
 初回のみ、リポジトリの Settings → Pages → Source を「GitHub Actions」にしてください。
