@@ -67,6 +67,6 @@ git push
 
 ## Claude に頼む場合
 
-Claude Code で `/add-article` を実行するか、「1-2 の解答を追加して」のように頼む。
-解答コード・行数・ステップ数・考え方など、分かっている情報を渡すと、ファイルの作成から `go test` での確認まで行う。
-（スキルの定義: [.claude/skills/add-article/SKILL.md](../.claude/skills/add-article/SKILL.md)）
+- Claude Code で `/add-article` を実行するか、「1-2 の解答を追加して」のように頼む。
+- 解答コード・行数・ステップ数・考え方など、分かっている情報を渡すと、ファイルの作成から `go test` での確認まで行う。
+- スキルの定義: [.claude/skills/add-article/SKILL.md](../.claude/skills/add-article/SKILL.md)
