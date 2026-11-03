@@ -15,13 +15,14 @@ func main() {
 	out := flag.String("out", "dist", "出力先のディレクトリ")
 	serve := flag.Bool("serve", false, "生成後にローカルサーバーを起動する")
 	addr := flag.String("addr", "localhost:8080", "-serve のアドレス")
+	baseURL := flag.String("base-url", "", "公開先の URL（OGP タグの絶対 URL に使う。空なら OGP タグを出さない）")
 	flag.Parse()
 
 	site, err := loadSite(*content)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := build(site, *out); err != nil {
+	if err := build(site, *out, *baseURL); err != nil {
 		log.Fatal(err)
 	}
 	log.Printf("%s に出力しました（チャプター %d / ステージ %d / テクニック %d / 文法 %d）",

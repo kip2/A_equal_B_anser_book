@@ -30,12 +30,15 @@ type Crumb struct {
 }
 
 // Page はテンプレートに渡すデータ。Root はそのページからサイトのルートへの相対パス。
+// URL と OGImage は公開先の絶対 URL で、-base-url を指定したときだけ設定される（OGP 用）。
 type Page struct {
 	Root    string
 	Title   string
 	Section string
 	Crumbs  []Crumb
 	Site    *Site
+	URL     string
+	OGImage string
 
 	Chapter   *Chapter
 	Stage     *Stage
@@ -77,13 +80,17 @@ func loadTemplates() (map[string]*template.Template, error) {
 	return tmpls, nil
 }
 
-func build(site *Site, out string) error {
+// build はサイトを out に出力する。baseURL は公開先の URL で、空なら OGP タグを出さない。
+func build(site *Site, out, baseURL string) error {
 	tmpls, err := loadTemplates()
 	if err != nil {
 		return err
 	}
 	if err := os.RemoveAll(out); err != nil {
 		return err
+	}
+	if baseURL != "" {
+		baseURL = strings.TrimSuffix(baseURL, "/") + "/"
 	}
 
 	write := func(name, path string, p Page) error {
@@ -92,6 +99,10 @@ func build(site *Site, out string) error {
 			p.Root = "./"
 		}
 		p.Site = site
+		if baseURL != "" {
+			p.URL = baseURL + path
+			p.OGImage = baseURL + "static/ogp.png"
+		}
 		var buf bytes.Buffer
 		if err := tmpls[name].ExecuteTemplate(&buf, "layout", p); err != nil {
 			return fmt.Errorf("%s: %w", path, err)

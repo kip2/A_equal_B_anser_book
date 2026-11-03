@@ -14,7 +14,7 @@ import (
 
 func TestBuildFixture(t *testing.T) {
 	out := t.TempDir()
-	if err := build(loadFixture(t), out); err != nil {
+	if err := build(loadFixture(t), out, ""); err != nil {
 		t.Fatal(err)
 	}
 
@@ -69,7 +69,7 @@ func TestBuildRemovesStaleFiles(t *testing.T) {
 	if err := os.WriteFile(stale, nil, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := build(loadFixture(t), out); err != nil {
+	if err := build(loadFixture(t), out, ""); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := os.Stat(stale); err == nil {
@@ -84,7 +84,7 @@ func TestBuildContent(t *testing.T) {
 		t.Fatal(err)
 	}
 	out := t.TempDir()
-	if err := build(site, out); err != nil {
+	if err := build(site, out, ""); err != nil {
 		t.Fatal(err)
 	}
 	checkSite(t, out)
@@ -163,4 +163,46 @@ func readFile(t *testing.T, out, name string) string {
 		t.Fatal(err)
 	}
 	return string(b)
+}
+
+func TestBuildOGP(t *testing.T) {
+	t.Run("base-url あり", func(t *testing.T) {
+		out := t.TempDir()
+		if err := build(loadFixture(t), out, "https://example.com/book"); err != nil {
+			t.Fatal(err)
+		}
+		stage := readFile(t, out, "chapters/1/1-2/index.html")
+		for _, want := range []string{
+			`<meta property="og:title" content="1-2 二問目 | A=B Answer Book">`,
+			`<meta property="og:url" content="https://example.com/book/chapters/1/1-2/">`,
+			`<meta property="og:image" content="https://example.com/book/static/ogp.png">`,
+			`<meta name="twitter:card" content="summary_large_image">`,
+		} {
+			if !strings.Contains(stage, want) {
+				t.Errorf("1-2 のページに %q がない", want)
+			}
+		}
+		top := readFile(t, out, "index.html")
+		for _, want := range []string{
+			`<meta property="og:title" content="A=B Answer Book">`,
+			`<meta property="og:url" content="https://example.com/book/">`,
+		} {
+			if !strings.Contains(top, want) {
+				t.Errorf("トップページに %q がない", want)
+			}
+		}
+		if _, err := os.Stat(filepath.Join(out, "static", "ogp.png")); err != nil {
+			t.Error("OGP 画像が出力されていない")
+		}
+	})
+
+	t.Run("base-url なし", func(t *testing.T) {
+		out := t.TempDir()
+		if err := build(loadFixture(t), out, ""); err != nil {
+			t.Fatal(err)
+		}
+		if strings.Contains(readFile(t, out, "index.html"), "og:") {
+			t.Error("base-url なしなのに OGP タグが出ている")
+		}
+	})
 }

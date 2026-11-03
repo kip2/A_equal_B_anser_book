@@ -29,6 +29,21 @@ go run ./builder             # dist/ に出力
 go run ./builder -serve      # 出力後に http://localhost:8080/ で確認
 ```
 
+| オプション | 内容 |
+| --- | --- |
+| `-content` | 記事のディレクトリ（既定: `content`） |
+| `-out` | 出力先（既定: `dist`） |
+| `-serve` / `-addr` | 出力後にローカルサーバーを起動する / そのアドレス（既定: `localhost:8080`） |
+| `-base-url` | 公開先の URL。指定すると OGP タグを出力する |
+
+### OGP
+
+SNS などに URL を貼ったときのカード表示用に、各ページへ OGP タグを出力します。
+
+- 画像は [builder/static/ogp.png](../builder/static/ogp.png)（1200×630）で、全ページ共通です。
+- 画像の元は [docs/ogp.html](ogp.html) です。作り直すときは、このファイルをブラウザで 1200×630 の大きさで開いてスクリーンショットを撮ります。
+- OGP には絶対 URL が必要なので、`-base-url` を指定したときだけタグを出力します。公開時は GitHub Actions が公開先の URL を自動で渡します。
+
 ## テスト
 
 ```sh
@@ -54,6 +69,7 @@ go test -run '^TestBuild' ./...    # 結合テストのみ
 | --- | --- |
 | `TestBuildFixture` | テスト用コンテンツからサイトを生成し、全ページが出力されるか、ステージ・テクニックのページに解答コード・関連リンク・前後リンク・記録が出ているか |
 | `TestBuildRemovesStaleFiles` | 再生成時に前回の出力が残らないか |
+| `TestBuildOGP` | `-base-url` を指定したときに、ページごとのタイトルと絶対 URL で OGP タグが出るか。指定しないときは出ないか |
 | `TestBuildContent` | **実際の `content/` からサイトを生成できるか**。記事の書き間違いはここで検出される |
 
 結合テストでは、生成した全ページについて次も検査します。
@@ -77,7 +93,7 @@ go test -run '^TestBuild' ./...    # 結合テストのみ
 
 ## 公開（[.github/workflows/pages.yml](../.github/workflows/pages.yml)）
 
-`main` への push で実行されます。テストを先に実行し、通った場合だけサイトを生成して GitHub Pages に公開します。
+`main` への push で実行されます。テストを先に実行し、通った場合だけ、公開先の URL（OGP 用）を取得してサイトを生成し、GitHub Pages に公開します。
 
 初回のみ、リポジトリの Settings → Pages → Source を「GitHub Actions」にしてください。
 
