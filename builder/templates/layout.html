@@ -4,13 +4,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{with .Title}}{{.}} | {{end}}A=B Answer Book</title>
-<meta name="description" content="ゲーム「A=B」の自分の解答集とテクニック集です。">
+<title>{{with .Title}}{{.}} | {{end}}A=B Unofficial Answer Book</title>
+<meta name="description" content="ゲーム「A=B」の非公式の解答集とテクニック集です。個人が作成したもので、公式とは関係ありません。">
 {{- with .URL}}
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="A=B Answer Book">
-<meta property="og:title" content="{{with $.Title}}{{.}} | {{end}}A=B Answer Book">
-<meta property="og:description" content="ゲーム「A=B」の自分の解答集とテクニック集です。">
+<meta property="og:site_name" content="A=B Unofficial Answer Book">
+<meta property="og:title" content="{{with $.Title}}{{.}} | {{end}}A=B Unofficial Answer Book">
+<meta property="og:description" content="ゲーム「A=B」の非公式の解答集とテクニック集です。個人が作成したもので、公式とは関係ありません。">
 <meta property="og:url" content="{{.}}">
 <meta property="og:image" content="{{$.OGImage}}">
 <meta name="twitter:card" content="summary_large_image">
@@ -20,7 +20,7 @@
 <body>
 <div class="wrap">
 <header>
-  <a class="site-title" href="{{.Root}}">A=B Answer Book</a>
+  <a class="site-title" href="{{.Root}}">A=B Unofficial Answer Book</a>
   <nav class="site-nav">
     <a href="{{.Root}}chapters/"{{if eq .Section "chapters"}} class="active"{{end}}>チャプター</a> |
     <a href="{{.Root}}techniques/"{{if eq .Section "techniques"}} class="active"{{end}}>テクニック</a> |
@@ -38,7 +38,8 @@
 {{template "content" .}}
 </main>
 <hr>
-<footer class="site-footer">ネタバレ注意：解答と解説を含みます。</footer>
+<footer class="site-footer">非公式のファンサイトです。ゲーム「A=B」の開発元とは関係ありません。<br>
+ネタバレ注意：解答と解説を含みます。</footer>
 </div>
 <script src="{{.Root}}static/site.js"></script>
 </body>

@@ -1,6 +1,8 @@
-# A=B Answer Book
+# A=B Unofficial Answer Book
 
-プログラミングパズルゲーム [A=B](https://store.steampowered.com/app/1720850/AB/)（Steam）の、自分の解答集とテクニック集です。
+プログラミングパズルゲーム [A=B](https://store.steampowered.com/app/1720850/AB/)（Steam）の、個人による**非公式**の解答集とテクニック集です。
+
+公式（開発元）とは関係ありません。
 
 > [!WARNING]
 > ネタバレ注意：全ステージの解答と解説を含みます。

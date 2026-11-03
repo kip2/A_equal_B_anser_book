@@ -101,7 +101,7 @@ func build(site *Site, out, baseURL string) error {
 		p.Site = site
 		if baseURL != "" {
 			p.URL = baseURL + path
-			p.OGImage = baseURL + "static/ogp.png"
+			p.OGImage = baseURL + "static/ogp-unofficial.png"
 		}
 		var buf bytes.Buffer
 		if err := tmpls[name].ExecuteTemplate(&buf, "layout", p); err != nil {
