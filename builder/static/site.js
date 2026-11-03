@@ -1,4 +1,20 @@
 // コードブロックに行番号とコピーボタンを付け、URL の #xxx が指す開閉ブロックを開く。
+const ICONS = {
+  copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  done: '<path d="M4 12l5 5L20 6"/>',
+  failed: '<path d="M6 6l12 12M18 6L6 18"/>',
+};
+
+function setIcon(btn, name, label) {
+  btn.innerHTML =
+    '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    ICONS[name] +
+    "</svg>";
+  btn.title = label;
+  btn.setAttribute("aria-label", label);
+  btn.classList.toggle("done", name === "done");
+}
+
 document.querySelectorAll(".md pre > code").forEach((code) => {
   const pre = code.parentElement;
   const text = code.textContent.replace(/\n$/, "");
@@ -19,19 +35,15 @@ document.querySelectorAll(".md pre > code").forEach((code) => {
   const btn = document.createElement("button");
   btn.type = "button";
   btn.className = "copy-btn";
-  btn.textContent = "[コピー]";
+  setIcon(btn, "copy", "コピー");
   btn.addEventListener("click", async () => {
     try {
       await copyText(text);
-      btn.textContent = "[コピーしました]";
-      btn.classList.add("done");
+      setIcon(btn, "done", "コピーしました");
     } catch {
-      btn.textContent = "[コピーできませんでした]";
+      setIcon(btn, "failed", "コピーできませんでした");
     }
-    setTimeout(() => {
-      btn.textContent = "[コピー]";
-      btn.classList.remove("done");
-    }, 1500);
+    setTimeout(() => setIcon(btn, "copy", "コピー"), 1500);
   });
   wrap.appendChild(btn);
 });
