@@ -55,4 +55,6 @@ jobs:
     steps:
       - uses: golang/govulncheck-action@v1
         with:
+          # 初期値の stable が優先されて go.mod が無視されるため、空にする
+          go-version-input: ""
           go-version-file: go.mod
