@@ -1,7 +1,6 @@
 ---
 title: 昇順
 lines: 9
-steps:
 status: done
 techniques: [sort-by-swap, cancel-pairs, specific-first, empty-left]
 ---

@@ -1,7 +1,6 @@
 ---
 title: 大文字
 lines: 3
-steps:
 status: done
 techniques: [other-chars]
 ---

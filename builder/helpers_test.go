@@ -12,7 +12,6 @@ var fixture = map[string]string{
 	"chapters/chapter01/1-2_second.md": `---
 title: 二問目
 lines: 2
-steps: 10
 status: wip
 techniques: [swap, swap-2]
 ---

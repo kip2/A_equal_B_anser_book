@@ -1,7 +1,6 @@
 ---
 title: ちょうど3文字
 lines: 5
-steps:
 status: done
 techniques: [normalize-chars, other-chars]
 ---

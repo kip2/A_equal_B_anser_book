@@ -3,7 +3,7 @@
 {{if .Stages}}
 <ul class="tree">
   {{range .Stages}}
-  <li><a href="{{$.Root}}{{.URL}}">{{.ID}} {{.Title}}</a><span class="rec">{{.LinesText}}行 / {{.StepsText}}ステップ / {{.StatusLabel}}</span></li>
+  <li><a href="{{$.Root}}{{.URL}}">{{.ID}} {{.Title}}</a><span class="rec">{{.LinesText}}行 / {{.StatusLabel}}</span></li>
   {{end}}
 </ul>
 {{else}}

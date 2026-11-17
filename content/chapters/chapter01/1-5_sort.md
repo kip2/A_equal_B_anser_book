@@ -1,7 +1,6 @@
 ---
 title: ソート
 lines: 3
-steps:
 status: done
 techniques: [sort-by-swap]
 ---

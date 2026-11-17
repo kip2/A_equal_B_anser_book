@@ -1,7 +1,6 @@
 ---
 title: 最多
 lines:
-steps:
 status: wip
 techniques: []
 ---

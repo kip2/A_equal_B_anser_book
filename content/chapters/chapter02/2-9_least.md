@@ -1,7 +1,6 @@
 ---
 title: 最小
 lines:
-steps:
 status: wip
 techniques: []
 ---

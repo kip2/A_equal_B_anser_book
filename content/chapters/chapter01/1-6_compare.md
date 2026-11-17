@@ -1,7 +1,6 @@
 ---
 title: 比較
 lines: 4
-steps:
 status: done
 techniques: [sort-by-swap, cancel-pairs]
 ---

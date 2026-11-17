@@ -1,7 +1,6 @@
 ---
 title: ステージ名
 lines:                  # 行数（空欄なら「-」表示）
-steps:                  # ステップ数（空欄なら「-」表示）
 status: done            # done / wip / todo
 techniques: []          # 使ったテクニックのファイル名（例: [sort-by-swap]）
 ---

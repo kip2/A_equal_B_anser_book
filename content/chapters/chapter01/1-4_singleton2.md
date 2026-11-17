@@ -1,7 +1,6 @@
 ---
 title: 重複削除 2
 lines: 2
-steps:
 status: done
 techniques: [shrink-runs]
 ---
