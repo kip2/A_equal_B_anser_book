@@ -1,7 +1,6 @@
 ---
 title: AAA
 lines: 4
-steps:
 status: done
 techniques: [normalize-chars, empty-left]
 ---

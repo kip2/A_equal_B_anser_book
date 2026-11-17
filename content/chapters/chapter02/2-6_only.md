@@ -1,7 +1,6 @@
 ---
 title: ただひとつ
 lines:
-steps:
 status: wip
 techniques: []
 ---

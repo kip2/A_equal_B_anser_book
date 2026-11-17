@@ -1,7 +1,6 @@
 ---
 title: Hello, World
 lines: 1
-steps:
 status: done
 techniques: [empty-left]
 ---

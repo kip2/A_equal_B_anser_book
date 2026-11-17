@@ -48,7 +48,7 @@ func TestBuildFixture(t *testing.T) {
 		`href="../../../syntax/1/"`,        // 文法
 		`href="../../../chapters/1/1-1/"`,  // 前のステージ
 		`href="../../../chapters/2/2-1/"`,  // 次のステージ（チャプターをまたぐ）
-		`2行 / 10ステップ / 挑戦中`,
+		`2行 / 挑戦中`,
 	} {
 		if !strings.Contains(stage, want) {
 			t.Errorf("1-2 のページに %q がない", want)

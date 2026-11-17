@@ -56,7 +56,6 @@ type Stage struct {
 	Num        int
 	Title      string
 	Lines      *int
-	Steps      *int
 	Status     string
 	Techniques []*Technique
 	Body       template.HTML
@@ -124,7 +123,6 @@ func (s *Stage) URL() string   { return s.Chapter.URL() + s.ID() + "/" }
 func (s *Stage) Label() string { return s.ID() + " " + s.Title }
 
 func (s *Stage) LinesText() string { return intText(s.Lines) }
-func (s *Stage) StepsText() string { return intText(s.Steps) }
 
 func (s *Stage) StatusLabel() string {
 	switch s.Status {
@@ -244,7 +242,6 @@ func (site *Site) loadChapters(dir string) error {
 			var meta struct {
 				Title      string   `yaml:"title"`
 				Lines      *int     `yaml:"lines"`
-				Steps      *int     `yaml:"steps"`
 				Status     string   `yaml:"status"`
 				Techniques []string `yaml:"techniques"`
 			}
@@ -267,7 +264,6 @@ func (site *Site) loadChapters(dir string) error {
 				Num:            atoi(m[2]),
 				Title:          meta.Title,
 				Lines:          meta.Lines,
-				Steps:          meta.Steps,
 				Status:         meta.Status,
 				Body:           body,
 				techniqueSlugs: meta.Techniques,

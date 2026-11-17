@@ -1,7 +1,6 @@
 ---
 title: 余り
 lines: 6
-steps:
 status: done
 techniques: [normalize-chars, remove-in-groups, specific-first, empty-left]
 ---

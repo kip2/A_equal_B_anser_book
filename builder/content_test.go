@@ -100,8 +100,8 @@ func TestLoadSite(t *testing.T) {
 		if s21.Status != "todo" {
 			t.Errorf("status 省略時は todo: %q", s21.Status)
 		}
-		if s12.LinesText() != "2" || s12.StepsText() != "10" || s21.LinesText() != "-" {
-			t.Errorf("行数/ステップ数: %s %s %s", s12.LinesText(), s12.StepsText(), s21.LinesText())
+		if s12.LinesText() != "2" || s21.LinesText() != "-" {
+			t.Errorf("行数: %s %s", s12.LinesText(), s21.LinesText())
 		}
 		if s12.Next != s21 || s21.Prev != s12 {
 			t.Error("チャプターをまたいだ前後リンクが不正")

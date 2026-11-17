@@ -1,7 +1,6 @@
 ---
 title: 奇数
 lines: 10
-steps:
 status: done
 techniques: [sort-by-swap, remove-in-groups, specific-first, empty-left]
 ---

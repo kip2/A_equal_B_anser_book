@@ -1,7 +1,6 @@
 ---
 title: AをBに
 lines: 1
-steps:
 status: done
 techniques: []
 ---
